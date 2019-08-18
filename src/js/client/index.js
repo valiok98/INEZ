@@ -1,14 +1,13 @@
-// import { } from 'redux';
-import { MDCTopAppBar } from '@material/top-app-bar';
-
+import { MDCList } from '@material/list';
+import { MDCRipple } from '@material/ripple';
+import { MDCTextField } from '@material/textfield';
 
 class Index {
     constructor() {
         // Instantiation
-        const topAppBarElement = document.querySelector('.mdc-top-app-bar');
-        const topAppBar = new MDCTopAppBar(topAppBarElement);
-        console.log(1);
-
+        const list = new MDCList(document.querySelector('.content .mdc-list'));
+        const listItemRipples = list.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+        const textField = new MDCTextField(document.querySelector('.mdc-text-field'));
     }
 }
 

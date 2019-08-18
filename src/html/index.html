@@ -6,22 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>INEZ</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/src/assets/favicon/site.webmanifest">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="/dist/index.min.css">
 </head>
 
 <body>
     <main>
-        <header class="mdc-top-app-bar">
-            <div class="mdc-top-app-bar__row">
-                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-                    <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
-                    <span class="mdc-top-app-bar__title">Title</span>
-                </section>
-            </div>
+        <header class="top-app-bar">
+            <span>INtelligenter EinkaufsZettel</span>
         </header>
         <div class="content">
-
+            <div class="mdc-list-background">
+                <div class="mdc-list-input mdc-text-field">
+                    <input type="text" id="my-text-field" class="mdc-text-field__input">
+                    <label class="mdc-floating-label" for="my-text-field">Deine Eingabe</label>
+                    <div class="mdc-line-ripple"></div>
+                </div>
+                <ul class="mdc-list">
+                    <li class="mdc-list-item" tabindex="0">
+                        <span class="mdc-list-item__text">Single-line item</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </main>
 </body>
