@@ -6,8 +6,11 @@ const autoprefixer = require('autoprefixer');
 module.exports = {
     mode: 'development',
     entry: {
-        'index': ['babel-polyfill', './src/js/client/index.js'],
+        'index': ['babel-polyfill', './src/js/client/index.ts'],
         'index.min.css': './src/css/index.scss'
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js']
     },
     output: {
         filename: '[name].min.js',
@@ -44,6 +47,11 @@ module.exports = {
                         },
                     }
                 ],
+            },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/
             },
             {
                 test: /\.m?js$/,
