@@ -90,3 +90,17 @@ header>span {
     flex: 1 1 90%;
     margin-bottom: 50px;
 }
+
+@media only screen and (min-width: 1280px) {
+    .content>.mdc-list-background {
+        width: 50%;
+        padding: 0 25px;
+        background: #FFA726;
+        border-radius: 5%;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+}
