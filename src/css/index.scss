@@ -7,6 +7,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
+    color: #323232;
 }
 
 body {
@@ -45,7 +46,7 @@ header>span {
 .content>.mdc-list-background {
     width: 800px;
     padding: 0 25px;
-    background: #FFA726;
+    background: #aac0e3;
     border-radius: 5%;
     display: flex;
     flex-flow: column nowrap;
@@ -95,7 +96,7 @@ header>span {
     .content>.mdc-list-background {
         width: 50%;
         padding: 0 25px;
-        background: #FFA726;
+        background: #aac0e3;
         border-radius: 5%;
         display: flex;
         flex-flow: column nowrap;

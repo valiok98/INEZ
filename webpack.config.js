@@ -7,6 +7,7 @@ module.exports = {
     mode: 'development',
     entry: {
         'index': ['babel-polyfill', './src/js/client/index.ts'],
+        'display-suggestions': './src/js/client/display-suggestions.ts',
         'index.min.css': './src/css/index.scss'
     },
     resolve: {
@@ -62,6 +63,11 @@ module.exports = {
                         presets: ['@babel/preset-env']
                     }
                 }
+            },
+            {
+                test: /.*\/src\/.*\.js$/,
+                exclude: /display-suggestions.ts/, // excluding .spec files
+                loader: "uglify"
             }
         ]
     },
