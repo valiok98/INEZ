@@ -5,24 +5,36 @@ import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {Menu} from './menu';
 
-
 class Index {
 
     private store: any;
+    private listObj: { dom: HTMLDivElement, mdc: MDCList };
+    private textFieldObj: { dom: HTMLDivElement, mdc: MDCTextField };
     private list: any;
     private textField: any;
     private entriesLength: number;
     private menu: Menu;
 
     constructor() {
+
+
         this.store = window.store;
         // Tex field component.
-        this.textField = new MDCTextField(document.querySelector('.mdc-text-field'));
+        this.listObj = {
+            dom: document.querySelector('.content .mdc-list.entries_list'),
+            mdc: new MDCList(document.querySelector('.content .mdc-list.entries_list'))
+        };
+        this.textFieldObj = {
+            dom: document.querySelector('.mdc-text-field'),
+            mdc: new MDCTextField(document.querySelector('.mdc-text-field'))
+        };
+        // Initialize MDC components.
+        this.listObj.mdc.getDefaultFoundation().init();
+        this.textFieldObj.mdc.getDefaultFoundation().init();
         // List component.
-        this.list = new MDCList(document.querySelector('.content .mdc-list.entries_list'));
-        this.list.listElements.map((listItemEl: any) => new MDCRipple(listItemEl));
+        this.listObj.mdc.listElements.map((listItemEl: any) => new MDCRipple(listItemEl));
         // Track the number of entries in the list.
-        this.entriesLength = this.list.foundation_.adapter_.getListItemCount();
+        this.entriesLength = this.listObj.mdc.getDefaultFoundation()['adapter_'].getListItemCount();
 
         // Suggestions menu component.
         this.menu = new Menu();
@@ -31,7 +43,6 @@ class Index {
 
     /**
      * Add a DOM item to the list.
-     *
      * @param {*} entry
      */
     add_list_item(entry: string) {
@@ -42,7 +53,7 @@ class Index {
             <span class="mdc-list-item__meta material-icons" aria-hidden="true">delete</span>`;
         const wasteBin: HTMLSpanElement = li.querySelector('span.material-icons');
         wasteBin.addEventListener('click', (e: MouseEvent) => {
-            const selIndex = this.list.foundation_.adapter_.getFocusedElementIndex();
+            const selIndex = this.listObj.mdc.getDefaultFoundation()['adapter_'].getFocusedElementIndex();
             this.store.dispatch({type: 'REMOVE_ENTRY', entryIndex: selIndex});
         });
         wasteBin.addEventListener('mouseover', (e: MouseEvent) => {
@@ -51,16 +62,15 @@ class Index {
         wasteBin.addEventListener('mouseleave', (e: MouseEvent) => {
             wasteBin.style.color = 'rgba(0, 0, 0, 0.38)';
         });
-        this.list.root_.appendChild(li);
+        this.listObj.dom.appendChild(li);
     }
 
     /**
      * Remove a DOM item from the list.
-     *
      * @param {*} entryIndex
      */
     remove_list_item(entryIndex: number) {
-        const li = this.list.root_.querySelector(`li:nth-of-type(${entryIndex + 1})`);
+        const li = this.listObj.dom.querySelector(`li:nth-of-type(${entryIndex + 1})`);
         li.remove();
     }
 
@@ -68,12 +78,12 @@ class Index {
      * All handlers for the component and store.
      */
     attach_handlers() {
-        fromEvent(this.textField.input_, 'keyup')
+        fromEvent(this.textFieldObj.dom.querySelector('input'), 'keyup')
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
                 tap((e: KeyboardEvent) => {
-                    const userInput: string = this.textField.input_.value.trim();
+                    const userInput: string = this.textFieldObj.dom.querySelector('input').value.trim();
                     const scriptTag: HTMLScriptElement = document.createElement('script');
                     const previousScriptTag = document.querySelector('script#suggestionsScript');
                     if (previousScriptTag) {
@@ -84,11 +94,11 @@ class Index {
                     document.querySelector('html').appendChild(scriptTag);
 
                     this.menu.open();
-                    this.textField.focus();
+                    this.textFieldObj.mdc.focus();
 
                     if (e.key === 'Enter' && userInput !== '') {
                         this.store.dispatch({type: 'ADD_ENTRY', entry: userInput});
-                        this.textField.input_.value = '';
+                        this.textFieldObj.dom.querySelector('input').value = '';
                     }
                 })
             ).subscribe();
@@ -110,7 +120,7 @@ class Index {
 }
 
 
-window.addEventListener('load', e => {
+window.addEventListener('load', _ => {
     new Index();
 });
 
