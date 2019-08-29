@@ -1,4 +1,4 @@
-import {MDCMenu} from '@material/menu';
+import { MDCMenu } from '@material/menu';
 
 /**
  * Suggestions menu component.
@@ -40,7 +40,8 @@ export class Menu {
             const li: HTMLLIElement = document.createElement('li');
             li.classList.add('mdc-list-item');
             li.setAttribute('role', 'menuitem');
-            li.innerHTML = `<span class = "mdc-list-item__text" >${suggestions[suggIdx]}</span>`;
+            li.setAttribute('tabindex', suggIdx === 0 ? '0' : '-1');
+            li.innerHTML = `<span class="mdc-list-item__text">${suggestions[suggIdx]}</span>`;
             this.menuObj.dom.querySelector('ul.mdc-list').appendChild(li);
         }
     }
@@ -75,12 +76,17 @@ export class Menu {
      * All event handlers for component and store.
      */
     attach_handlers() {
+
+        this.menuObj.dom.addEventListener('MDCMenu:selected', (e: any) => {
+            console.log(e.detail);
+        });
+
         this.store.subscribe(() => {
             const input = this.store.getState().input;
             if (input.inputChanged === true) {
                 this.populate_menu_entries(input.suggestions);
                 // Reset the changed state of the input component.
-                this.store.dispatch({type: 'RESET_CHANGED'});
+                this.store.dispatch({ type: 'RESET_CHANGED' });
             }
         });
     }
