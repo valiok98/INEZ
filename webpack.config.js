@@ -6,6 +6,7 @@ const autoprefixer = require('autoprefixer');
 module.exports = {
     mode: 'development',
     entry: {
+        'store': './src/js/client/store.ts',
         'index': ['babel-polyfill', './src/js/client/index.ts'],
         'index.min.css': './src/css/index.scss'
     },
@@ -31,9 +32,9 @@ module.exports = {
                             name: 'index.min.css',
                         },
                     },
-                    { loader: 'extract-loader' },
-                    { loader: 'css-loader' },
-                    { loader: 'resolve-url-loader' },
+                    {loader: 'extract-loader'},
+                    {loader: 'css-loader'},
+                    {loader: 'resolve-url-loader'},
                     {
                         loader: 'postcss-loader',
                         options: {

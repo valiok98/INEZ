@@ -3,7 +3,6 @@ import {MDCRipple} from '@material/ripple';
 import {MDCTextField} from '@material/textfield';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import {store} from './store';
 import {Menu} from './menu';
 
 
@@ -16,18 +15,17 @@ class Index {
     private menu: Menu;
 
     constructor() {
-        this.store = store;
+        this.store = window.store;
         // Tex field component.
         this.textField = new MDCTextField(document.querySelector('.mdc-text-field'));
-
         // List component.
-        this.list = new MDCList(document.querySelector('.content .mdc-list'));
+        this.list = new MDCList(document.querySelector('.content .mdc-list.entries_list'));
         this.list.listElements.map((listItemEl: any) => new MDCRipple(listItemEl));
         // Track the number of entries in the list.
         this.entriesLength = this.list.foundation_.adapter_.getListItemCount();
 
         // Suggestions menu component.
-        this.menu = new Menu(this.store);
+        this.menu = new Menu();
         this.attach_handlers();
     }
 
@@ -66,6 +64,9 @@ class Index {
         li.remove();
     }
 
+    /**
+     * All handlers for the component and store.
+     */
     attach_handlers() {
         fromEvent(this.textField.input_, 'keyup')
             .pipe(
@@ -83,6 +84,7 @@ class Index {
                     document.querySelector('html').appendChild(scriptTag);
 
                     this.menu.open();
+                    this.textField.focus();
 
                     if (e.key === 'Enter' && userInput !== '') {
                         this.store.dispatch({type: 'ADD_ENTRY', entry: userInput});

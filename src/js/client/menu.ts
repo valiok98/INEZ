@@ -9,10 +9,11 @@ export class Menu {
     private obj: MDCMenu;
 
 
-    constructor(store: any) {
-        this.store = store;
+    constructor() {
+        this.store = window.store;
         this.obj = new MDCMenu(document.querySelector('.mdc-menu'));
         this.set_fixed_position(false);
+        this.attach_handlers();
     }
 
     /**
@@ -20,6 +21,14 @@ export class Menu {
      */
     open() {
         this.obj.open = true;
+    }
+
+    add_menu_entry(){
+
+    }
+
+    remove_menu_entry() {
+
     }
 
     /**
@@ -35,6 +44,20 @@ export class Menu {
      */
     set_fixed_position(value: boolean) {
         this.obj.setFixedPosition(value);
+    }
+
+    /**
+     * All event handlers for component and store.
+     */
+    attach_handlers() {
+        this.store.subscribe(() => {
+            const input = this.store.getState().input;
+            if (input.inputChanged === true) {
+
+                // Reset the changed state of the input component.
+                this.store.dispatch({type: 'RESET_CHANGED'});
+            }
+        });
     }
 
 }

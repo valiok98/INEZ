@@ -1,16 +1,44 @@
-import { createStore, combineReducers } from 'redux';
+import {createStore, combineReducers, bindActionCreators} from 'redux';
+
+declare global {
+    interface Window {
+        store: any
+    }
+}
 
 interface action {
     type: string;
     entry: string;
     entryIndex: number;
+    inputChanged: false;
+    userInput: string;
+    suggestions: string[];
 }
 
 const initialState: object = {
-    entries: { values: [], entryIndex: -1 },
+    input: {inputChanged: false, userInput: '', suggestions: []},
+    entries: {values: [], entryIndex: -1},
 };
 
 const reducers = {
+    input: (state: any = {}, action: action): any => {
+        switch (action.type) {
+            case 'ADD_SUGGESTION':
+                return {
+                    ...state,
+                    inputChanged: true,
+                    userInput: action.userInput,
+                    suggestions: action.suggestions
+                };
+            case 'RESET_CHANGED':
+                return {
+                    ...state,
+                    inputChanged: false
+                };
+            default:
+                return state;
+        }
+    },
     entries: (state: any = {}, action: action): any => {
         switch (action.type) {
             case 'ADD_ENTRY':
@@ -26,8 +54,8 @@ const reducers = {
             default:
                 return state;
         }
-    },
+    }
 };
 
 const reducer = combineReducers(reducers);
-export const store = createStore(reducer, initialState);
+window.store = createStore(reducer, initialState);
