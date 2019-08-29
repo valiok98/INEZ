@@ -1,10 +1,10 @@
-import { MDCList } from '@material/list';
-import { MDCRipple } from '@material/ripple';
-import { MDCTextField } from '@material/textfield';
-import { fromEvent } from 'rxjs';
-import { throttleTime, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { store } from './store';
-
+import {MDCList} from '@material/list';
+import {MDCRipple} from '@material/ripple';
+import {MDCTextField} from '@material/textfield';
+import {fromEvent} from 'rxjs';
+import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
+import {store} from './store';
+import {Menu} from './menu';
 
 
 class Index {
@@ -13,6 +13,7 @@ class Index {
     private list: any;
     private textField: any;
     private entriesLength: number;
+    private menu: Menu;
 
     constructor() {
         this.store = store;
@@ -25,13 +26,15 @@ class Index {
         // Track the number of entries in the list.
         this.entriesLength = this.list.foundation_.adapter_.getListItemCount();
 
+        // Suggestions menu component.
+        this.menu = new Menu(this.store);
         this.attach_handlers();
     }
 
     /**
      * Add a DOM item to the list.
-     * 
-     * @param {*} entry 
+     *
+     * @param {*} entry
      */
     add_list_item(entry: string) {
         const li: HTMLLIElement = document.createElement('li');
@@ -42,7 +45,7 @@ class Index {
         const wasteBin: HTMLSpanElement = li.querySelector('span.material-icons');
         wasteBin.addEventListener('click', (e: MouseEvent) => {
             const selIndex = this.list.foundation_.adapter_.getFocusedElementIndex();
-            this.store.dispatch({ type: 'REMOVE_ENTRY', entryIndex: selIndex });
+            this.store.dispatch({type: 'REMOVE_ENTRY', entryIndex: selIndex});
         });
         wasteBin.addEventListener('mouseover', (e: MouseEvent) => {
             wasteBin.style.color = 'red';
@@ -55,8 +58,8 @@ class Index {
 
     /**
      * Remove a DOM item from the list.
-     * 
-     * @param {*} entryIndex 
+     *
+     * @param {*} entryIndex
      */
     remove_list_item(entryIndex: number) {
         const li = this.list.root_.querySelector(`li:nth-of-type(${entryIndex + 1})`);
@@ -79,8 +82,10 @@ class Index {
                     scriptTag.src = `https://www3.dict.cc/inc/ajax_autosuggest.php?s=${userInput}&jsonp=1&check_typo=1&lp_id=1`;
                     document.querySelector('html').appendChild(scriptTag);
 
+                    this.menu.open();
+
                     if (e.key === 'Enter' && userInput !== '') {
-                        this.store.dispatch({ type: 'ADD_ENTRY', entry: userInput });
+                        this.store.dispatch({type: 'ADD_ENTRY', entry: userInput});
                         this.textField.input_.value = '';
                     }
                 })

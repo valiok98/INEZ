@@ -15,27 +15,35 @@
 </head>
 
 <body>
-    <main>
-        <header class="top-app-bar">
-            <span>INtelligenter EinkaufsZettel</span>
-        </header>
-        <div class="content">
-            <div class="mdc-list-background">
-                <div class="mdc-list-input mdc-text-field">
-                    <input type="text" id="my-text-field" class="mdc-text-field__input">
-                    <label class="mdc-floating-label" for="my-text-field">Deine Eingabe</label>
-                    <div class="mdc-line-ripple"></div>
-                </div>
-                <ul class="mdc-list">
-                </ul>
+<main>
+    <header class="top-app-bar">
+        <span>INtelligenter EinkaufsZettel</span>
+    </header>
+    <div class="content">
+        <div class="mdc-list-background">
+            <div class="mdc-list-input mdc-text-field">
+                <input type="text" id="my-text-field" class="mdc-text-field__input">
+                <label class="mdc-floating-label" for="my-text-field">Deine Eingabe</label>
+                <div class="mdc-line-ripple"></div>
             </div>
+            <div class="menu-anchor  mdc-menu-surface--anchor">
+                <div class="mdc-menu mdc-menu-surface">
+                    <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                        <li class="mdc-list-item" role="menuitem">
+                            <span class="mdc-list-item__text">A Menu Item</span>
+                        </li>
+                        <li class="mdc-list-item" role="menuitem">
+                            <span class="mdc-list-item__text">Another Menu Item</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <ul class="mdc-list">
+            </ul>
         </div>
-    </main>
+    </div>
+</main>
 </body>
-<script type="module">
-    import * as t from '/dist/display-suggestions.min.js';
-    console.log(t);
-    // autosug_display_data
-</script>
+<script src="/dist/display-suggestions.js"></script>
 <script src="/dist/index.min.js"></script>
 </html>

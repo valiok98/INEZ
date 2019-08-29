@@ -1,50 +1,108 @@
 @import "@material/list/mdc-list";
 @import "@material/textfield/mdc-text-field";
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import './menu.scss';
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
-    color: #323232;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  color: #323232;
 }
 
 body {
-    background: #f2f2f2;
-    overflow-x: hidden;
+  background: #f2f2f2;
+  overflow-x: hidden;
 }
 
 main {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-flow: column nowrap;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 header {
-    width: 100%;
-    flex: 1 1 10%;
-    background: #448AFF !important;
-    font-size: 2em;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
+  width: 100%;
+  flex: 1 1 10%;
+  background: #448AFF !important;
+  font-size: 2em;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
 }
 
-header>span {
-    margin-left: 25px;
+header > span {
+  margin-left: 25px;
 }
 
 .content {
-    flex: 1 1 90%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  flex: 1 1 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.content>.mdc-list-background {
-    width: 800px;
+.content > .mdc-list-background {
+  width: 800px;
+  padding: 0 25px;
+  background: #aac0e3;
+  border-radius: 5%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.content > .mdc-list-background::before {
+  content: '';
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-left: 800px solid #f2f2f2;
+  border-bottom: 20px solid transparent;
+}
+
+.content > .mdc-list-background::after {
+  content: '';
+  width: 0;
+  height: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-right: 800px solid #f2f2f2;
+  border-top: 20px solid transparent;
+}
+
+.content > .mdc-list-background > .mdc-list-input {
+  width: 100%;
+  flex: 1 1 10%;
+  margin: 50px 0;
+  @include mdc-text-field-label-color(#448AFF);
+  @include mdc-text-field-caret-color(#448AFF);
+  @include mdc-text-field-line-ripple-color(#448AFF);
+}
+
+.content > .mdc-list-background > .menu-anchor {
+  width: 100%;
+  height: 0;
+  flex: 1 1 0;
+  margin-top: -50px;
+}
+
+.content > .mdc-list-background > .mdc-list {
+  width: 100%;
+  flex: 1 1 90%;
+  margin-bottom: 50px;
+}
+
+@media only screen and (min-width: 1280px) {
+  .content > .mdc-list-background {
+    width: 50%;
     padding: 0 25px;
     background: #aac0e3;
     border-radius: 5%;
@@ -53,55 +111,5 @@ header>span {
     align-items: center;
     justify-content: center;
     position: relative;
-}
-
-.content>.mdc-list-background::before {
-    content: '';
-    width: 0;
-    height: 0;
-    position: absolute;
-    top: 0;
-    right: 0;
-    border-left: 800px solid #f2f2f2;
-    border-bottom: 20px solid transparent;
-}
-
-.content>.mdc-list-background::after {
-    content: '';
-    width: 0;
-    height: 0;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    border-right: 800px solid #f2f2f2;
-    border-top: 20px solid transparent;
-}
-
-.content>.mdc-list-background>.mdc-list-input {
-    width: 100%;
-    flex: 1 1 10%;
-    margin: 50px 0;
-    @include mdc-text-field-label-color(#448AFF);
-    @include mdc-text-field-caret-color(#448AFF);
-    @include mdc-text-field-line-ripple-color(#448AFF);
-}
-
-.content>.mdc-list-background>.mdc-list {
-    width: 100%;
-    flex: 1 1 90%;
-    margin-bottom: 50px;
-}
-
-@media only screen and (min-width: 1280px) {
-    .content>.mdc-list-background {
-        width: 50%;
-        padding: 0 25px;
-        background: #aac0e3;
-        border-radius: 5%;
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-    }
+  }
 }
