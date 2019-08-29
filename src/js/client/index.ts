@@ -7,13 +7,11 @@ import {Menu} from './menu';
 
 class Index {
 
-    private store: any;
-    private listObj: { dom: HTMLDivElement, mdc: MDCList };
-    private textFieldObj: { dom: HTMLDivElement, mdc: MDCTextField };
-    private list: any;
-    private textField: any;
-    private entriesLength: number;
-    private menu: Menu;
+    public store: any;
+    public listObj: { dom: HTMLDivElement, mdc: MDCList };
+    public textFieldObj: { dom: HTMLDivElement, mdc: MDCTextField };
+    public entriesLength: number;
+    public menu: Menu;
 
     constructor() {
 
@@ -92,14 +90,11 @@ class Index {
                     scriptTag.setAttribute('id', 'suggestionsScript');
                     scriptTag.src = `https://www3.dict.cc/inc/ajax_autosuggest.php?s=${userInput}&jsonp=1&check_typo=1&lp_id=1`;
                     document.querySelector('html').appendChild(scriptTag);
-
-                    this.menu.open();
-                    this.textFieldObj.mdc.focus();
-
                     if (e.key === 'Enter' && userInput !== '') {
                         this.store.dispatch({type: 'ADD_ENTRY', entry: userInput});
                         this.textFieldObj.dom.querySelector('input').value = '';
                     }
+                    this.menu.open();
                 })
             ).subscribe();
 

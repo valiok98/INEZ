@@ -1,12 +1,12 @@
 import {MDCMenu} from '@material/menu';
+
 /**
  * Suggestions menu component.
  */
 export class Menu {
 
-    private store: any;
-    private menuObj: { dom: HTMLDivElement, mdc: MDCMenu };
-
+    public store: any;
+    public menuObj: { dom: HTMLDivElement, mdc: MDCMenu };
 
     constructor() {
         this.store = window.store;
@@ -41,7 +41,7 @@ export class Menu {
             li.classList.add('mdc-list-item');
             li.setAttribute('role', 'menuitem');
             li.innerHTML = `<span class = "mdc-list-item__text" >${suggestions[suggIdx]}</span>`;
-            this.menuObj.dom.appendChild(li);
+            this.menuObj.dom.querySelector('ul.mdc-list').appendChild(li);
         }
     }
 
@@ -51,6 +51,17 @@ export class Menu {
     close() {
         this.menuObj.mdc.open = false;
     }
+
+    /**
+     * Focus the menu.
+     */
+    focus() {
+        const allLi = this.menuObj.dom.querySelectorAll('li.mdc-list-item');
+        if (allLi.length > 0) {
+            this.menuObj.mdc.getDefaultFoundation()['adapter_'].focusItemAtIndex(0);
+        }
+    }
+
 
     /**
      * Set whether the menu's position should be fixed.
