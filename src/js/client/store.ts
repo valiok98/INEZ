@@ -1,4 +1,4 @@
-import {createStore, combineReducers, bindActionCreators} from 'redux';
+import { createStore, combineReducers, bindActionCreators } from 'redux';
 
 declare global {
     interface Window {
@@ -8,47 +8,72 @@ declare global {
 
 interface action {
     type: string;
+    inputChanged: boolean;
+    userInput: string;
+    focusInput: boolean;
+    suggestionsChanged: boolean;
+    suggestions: string[];
     entry: string;
     entryIndex: number;
-    inputChanged: false;
-    userInput: string;
-    suggestions: string[];
 }
 
 const initialState: object = {
-    input: {inputChanged: false, userInput: '', suggestions: []},
-    entries: {values: [], entryIndex: -1},
+    input: { inputChanged: false, userInput: '', focusInput: true },
+    list: { entries: [], entryIndex: -1 },
+    menu: { suggestionsChanged: false, suggestions: [] }
 };
 
 const reducers = {
     input: (state: any = {}, action: action): any => {
         switch (action.type) {
-            case 'ADD_SUGGESTION':
+            case 'SET_INPUT':
                 return {
                     ...state,
-                    inputChanged: true,
                     userInput: action.userInput,
-                    suggestions: action.suggestions
+                    inputChanged: true
                 };
-            case 'RESET_CHANGED':
+            case 'FOCUS_INPUT':
                 return {
                     ...state,
-                    inputChanged: false
+                    focusInput: true,
+                };
+            case 'RESET_INPUT':
+                return {
+                    ...state,
+                    inputChanged: false,
+                    focusInput: false
                 };
             default:
                 return state;
         }
     },
-    entries: (state: any = {}, action: action): any => {
+    menu: (state: any = {}, action: action): any => {
+        switch (action.type) {
+            case 'ADD_SUGGESTIONS':
+                return {
+                    ...state,
+                    suggestions: action.suggestions,
+                    suggestionsChanged: true
+                };
+            case 'RESET_MENU':
+                return {
+                    ...state,
+                    suggestionsChanged: false
+                };
+            default:
+                return state;
+        }
+    },
+    list: (state: any = {}, action: action): any => {
         switch (action.type) {
             case 'ADD_ENTRY':
                 return {
                     ...state,
-                    values: [...state.values, action.entry]
+                    entries: [...state.entries, action.entry]
                 };
             case 'REMOVE_ENTRY':
                 return {
-                    values: state.values.filter((_: any, eIndex: number) => eIndex !== action.entryIndex),
+                    entries: state.entries.filter((_: any, eIndex: number) => eIndex !== action.entryIndex),
                     entryIndex: action.entryIndex
                 };
             default:

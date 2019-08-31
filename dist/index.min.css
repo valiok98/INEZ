@@ -2539,12 +2539,21 @@ header > span {
   width: 100%;
   flex: 1 1 10%;
   margin: 50px 0; }
-  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled) .mdc-floating-label {
-    color: #448AFF; }
-  .content > .mdc-list-background > .mdc-list-input .mdc-text-field__input {
-    caret-color: #448AFF; }
-  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled) .mdc-line-ripple {
-    background-color: #448AFF; }
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled):not(.mdc-text-field--focused) .mdc-text-field__input:hover ~ .mdc-notched-outline .mdc-notched-outline__leading,
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled):not(.mdc-text-field--focused) .mdc-text-field__input:hover ~ .mdc-notched-outline .mdc-notched-outline__notch,
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled):not(.mdc-text-field--focused) .mdc-text-field__input:hover ~ .mdc-notched-outline .mdc-notched-outline__trailing,
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled):not(.mdc-text-field--focused) .mdc-text-field__icon:hover ~ .mdc-notched-outline .mdc-notched-outline__leading,
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled):not(.mdc-text-field--focused) .mdc-text-field__icon:hover ~ .mdc-notched-outline .mdc-notched-outline__notch,
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled):not(.mdc-text-field--focused) .mdc-text-field__icon:hover ~ .mdc-notched-outline .mdc-notched-outline__trailing {
+    border-color: #448AFF; }
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+    border-color: #448AFF; }
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+  .content > .mdc-list-background > .mdc-list-input:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+    border-color: #448AFF; }
 
 .content > .mdc-list-background > .menu-anchor {
   width: 100%;

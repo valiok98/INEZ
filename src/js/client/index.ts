@@ -1,9 +1,9 @@
-import {MDCList} from '@material/list';
-import {MDCRipple} from '@material/ripple';
-import {MDCTextField} from '@material/textfield';
-import {fromEvent} from 'rxjs';
-import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import {Menu} from './menu';
+import { MDCList } from '@material/list';
+import { MDCRipple } from '@material/ripple';
+import { MDCTextField } from '@material/textfield';
+import { fromEvent } from 'rxjs';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { Menu } from './menu';
 
 class Index {
 
@@ -52,7 +52,7 @@ class Index {
         const wasteBin: HTMLSpanElement = li.querySelector('span.material-icons');
         wasteBin.addEventListener('click', (e: MouseEvent) => {
             const selIndex = this.listObj.mdc.getDefaultFoundation()['adapter_'].getFocusedElementIndex();
-            this.store.dispatch({type: 'REMOVE_ENTRY', entryIndex: selIndex});
+            this.store.dispatch({ type: 'REMOVE_ENTRY', entryIndex: selIndex });
         });
         wasteBin.addEventListener('mouseover', (e: MouseEvent) => {
             wasteBin.style.color = 'red';
@@ -73,44 +73,81 @@ class Index {
     }
 
     /**
+     * Load the suggestions script over JSONP, which triggers the callback in /dist/display-suggestions.js.
+     * @param userInput 
+     */
+    load_suggestions(userInput: string) {
+        const scriptTag: HTMLScriptElement = document.createElement('script');
+        const previousScriptTag = document.querySelector('script#suggestionsScript');
+        if (previousScriptTag) {
+            previousScriptTag.remove();
+        }
+        scriptTag.setAttribute('id', 'suggestionsScript');
+        scriptTag.src = `https://www3.dict.cc/inc/ajax_autosuggest.php?s=${userInput}&jsonp=1&check_typo=1&lp_id=1`;
+        document.querySelector('html').appendChild(scriptTag);
+    }
+
+    /**
      * All handlers for the component and store.
      */
     attach_handlers() {
         fromEvent(this.textFieldObj.dom.querySelector('input'), 'keyup')
             .pipe(
-                debounceTime(500),
-                distinctUntilChanged(),
                 tap((e: KeyboardEvent) => {
-                    const userInput: string = this.textFieldObj.dom.querySelector('input').value.trim();
-                    const scriptTag: HTMLScriptElement = document.createElement('script');
-                    const previousScriptTag = document.querySelector('script#suggestionsScript');
-                    if (previousScriptTag) {
-                        previousScriptTag.remove();
-                    }
-                    scriptTag.setAttribute('id', 'suggestionsScript');
-                    scriptTag.src = `https://www3.dict.cc/inc/ajax_autosuggest.php?s=${userInput}&jsonp=1&check_typo=1&lp_id=1`;
-                    document.querySelector('html').appendChild(scriptTag);
+                    const userInput = this.textFieldObj.dom.querySelector('input').value;
                     if (e.key === 'Enter' && userInput !== '') {
-                        this.store.dispatch({type: 'ADD_ENTRY', entry: userInput});
+                        this.store.dispatch({ type: 'ADD_ENTRY', entry: userInput });
                         this.textFieldObj.dom.querySelector('input').value = '';
+                        this.menu.close();
+                        this.textFieldObj.mdc.focus();
+                    } else if (e.key === 'ArrowDown') {
+                        const allMenuLi = this.menu.menuObj.dom.querySelectorAll('li');
+                        if (allMenuLi.length !== 0) {
+                            this.menu.menuObj.mdc.getDefaultFoundation()['adapter_'].focusItemAtIndex(0);
+                            this.store.dispatch({
+                                type: 'SET_INPUT',
+                                userInput: allMenuLi[0].querySelector('span').textContent
+                            });
+                        }
+                    } else if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+                        this.load_suggestions(userInput);
+                        this.store.dispatch({ type: 'SET_INPUT', userInput });
+                        setTimeout(() => this.textFieldObj.mdc.focus(), 600);
+
                     }
-                    this.menu.open();
                 })
             ).subscribe();
 
-
+        // List items subscriber.
         this.store.subscribe(() => {
-            const storeEntries: { values: string[], entryIndex: number } = this.store.getState().entries;
-            if (storeEntries.values.length > this.entriesLength) {
+            const list = this.store.getState().list;
+            if (list.entries.length > this.entriesLength) {
                 this.entriesLength++;
                 // Add the newly typed entry to the list.
-                this.add_list_item(storeEntries.values[storeEntries.values.length - 1]);
-            } else if (storeEntries.values.length < this.entriesLength) {
+                this.add_list_item(list.entries[list.entries.length - 1]);
+            } else if (list.entries.length < this.entriesLength) {
                 this.entriesLength--;
                 // Remove the deleted entry from the list.
-                this.remove_list_item(storeEntries.entryIndex);
+                this.remove_list_item(list.entryIndex);
             }
-        })
+        });
+
+        this.store.subscribe(() => {
+            const input = this.store.getState().input;
+            if (input.inputChanged === true) {
+                this.textFieldObj.dom.querySelector('input').value = input.userInput;
+                this.store.dispatch({ type: 'RESET_INPUT' });
+            }
+        });
+        this.store.subscribe(() => {
+            const input = this.store.getState().input;
+            if (input.focusInput === true) {
+                this.load_suggestions(input.userInput);
+                setTimeout(() => this.textFieldObj.mdc.focus(), 600);
+                this.store.dispatch({ type: 'RESET_INPUT' });
+            }
+        });
+
     }
 }
 
